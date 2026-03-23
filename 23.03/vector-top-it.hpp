@@ -9,6 +9,9 @@ namespace topit {
     Vector();
     ~Vector();
 
+    Vector(const Vector< T >&) = delete;
+    Vector< T >& operator=(const Vector< T >&) = delete;
+
     bool isEmpty() const noexcept;
 
   private:
