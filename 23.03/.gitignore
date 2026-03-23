@@ -1,1 +1,5 @@
 vector-tests
+*.o
+*.d
+*.swp
+.vscode/settings.json
