@@ -26,10 +26,10 @@ bool test3()
 bool test4()
 {
   constexpr size_t size = 3ull;
-  Vector< int > v(size, 0);
+  Vector< int > v(size, 1);
   try {
-    v.at(0);
-    return true;
+    int &value = v.at(0);
+    return value == 1;
   } catch(...) {
     return false;
   }
@@ -51,10 +51,10 @@ bool test5() {
 bool test6()
 {
   constexpr size_t size = 3ull;
-  const Vector< int > v(size, 0);
+  const Vector< int > v(size, 1);
   try {
-    v.at(0);
-    return true;
+    const int &value = v.at(0);
+    return value == 1;
   } catch(...) {
     return false;
   }
