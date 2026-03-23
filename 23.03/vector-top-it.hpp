@@ -16,6 +16,9 @@ namespace topit {
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
+    size_t getCapacity() const noexcept;
+
+    void pushBack(const T &val);
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -31,7 +34,7 @@ namespace topit {
   };
 
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
-
+  template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
 }
 
 template< class T > T& topit::Vector< T >::at(size_t id) {
