@@ -69,17 +69,10 @@ template< class T > topit::Vector< T >::Vector(size_t s):
 {}
 
 template< class T > topit::Vector< T >::Vector(size_t s, const T &val):
- data_(s ? new T[s] : nullptr),
- size_(s),
- capacity_(s)
+ Vector(s)
 {
   for (size_t i = 0; i < s; i++) {
-    try {
-      data_[i] = val;
-    } catch(...) {
-      delete[] data_;
-      throw;
-    }
+    data_[i] = val;
   }
 }
 
