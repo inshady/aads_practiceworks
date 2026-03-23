@@ -12,12 +12,14 @@ bool test1()
 int main()
 {
   using test_t = bool(*)();
-  test_t tests[] = {
-    test1
+  using case_t = std::pair< test_t, const char* >;
+  case_t tests[] = {
+    { test1, "Default constructed vector must be empty" }
   };
-  size_t count = sizeof(tests) / sizeof(test_t);
+
+  size_t count = sizeof(tests) / sizeof(case_t);
   std::cout << std::boolalpha;
   for (size_t i = 0; i < count; i++) {
-    std::cout << tests[i]() << ": " << i << "\n";
+    std::cout << tests[i].first() << ": " << tests[i].second << "\n";
   }
 }
