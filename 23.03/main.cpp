@@ -2,5 +2,5 @@
 
 int main()
 {
-  Vector< int > v;
+  topit::Vector< int > v;
 }
