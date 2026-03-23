@@ -48,6 +48,31 @@ bool test5() {
   }
 }
 
+bool test6()
+{
+  constexpr size_t size = 3ull;
+  const Vector< int > v(size);
+  try {
+    v.at(0);
+    return true;
+  } catch(...) {
+    return false;
+  }
+}
+
+bool test7() {
+  constexpr size_t size = 3ull;
+  const Vector< int > v(size);
+  try {
+    v.at(size + 1);
+    return false;
+  } catch (const std::out_of_range &) {
+    return true;
+  } catch(...) {
+    return false;
+  }
+}
+
 int main()
 {
   using test_t = bool(*)();
@@ -57,7 +82,9 @@ int main()
     { test2, "Default constructed vector size is zero" },
     { test3, "Vector constructed with size has non-zero size" },
     { test4, "In-range access does not generate exceptions" },
-    { test5, "Out-of-range access generates std::out_of_range exception" }
+    { test5, "Out-of-range access generates std::out_of_range exception" },
+    { test6, "In-range access for const vector: same as non-const" },
+    { test7, "Out-of-range access for const vector: same as non-const" }
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
