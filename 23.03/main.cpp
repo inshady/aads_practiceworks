@@ -35,7 +35,8 @@ bool test4()
   }
 }
 
-bool test5() {
+bool test5()
+{
   constexpr size_t size = 3ull;
   Vector< int > v(size, 0);
   try {
@@ -60,7 +61,8 @@ bool test6()
   }
 }
 
-bool test7() {
+bool test7()
+{
   constexpr size_t size = 3ull;
   const Vector< int > v(size, 0);
   try {
@@ -71,6 +73,45 @@ bool test7() {
   } catch(...) {
     return false;
   }
+}
+
+bool test8()
+{
+  const Vector< int > v1(3, 0);
+  const Vector< int > v2(3, 0);
+  return v1 == v2;
+}
+
+bool test9()
+{
+  const Vector< int > v1(3, 0);
+  const Vector< int > v2(3, 1);
+  return v1 != v2;
+}
+
+bool test10()
+{
+  constexpr size_t size = 5;
+  const Vector< int > v(size, 0);
+  return v.getCapacity() == size;
+}
+
+bool test11()
+{
+  constexpr size_t size = 3;
+  const Vector< int > v(size, 0);
+  const int newValue = 10;
+  v.pushBack(newValue);
+  return v.getSize() == (size + 1);
+}
+
+bool test12()
+{
+  constexpr size_t size = 3;
+  const Vector< int > v(size, 0);
+  const int newValue = 10;
+  v.pushBack(newValue);
+  return v[size + 1] == newValue;
 }
 
 int main()
@@ -84,7 +125,12 @@ int main()
     { test4, "In-range access does not generate exceptions" },
     { test5, "Out-of-range access generates std::out_of_range exception" },
     { test6, "In-range access for const vector: same as non-const" },
-    { test7, "Out-of-range access for const vector: same as non-const" }
+    { test7, "Out-of-range access for const vector: same as non-const" },
+    { test8, "Vectors with equal content are equal" },
+    { test9, "Vectors with inequal content are inequal" },
+    { test10, "Capacity of vector is correct"},
+    { test11, "Size of vector increased after adding value" },
+    { test12, "Added value is correct" }
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
