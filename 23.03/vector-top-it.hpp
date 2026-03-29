@@ -36,6 +36,16 @@ namespace topit {
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
 }
 
+template< class T > T& topit::Vector< T >::operator[](size_t id) noexcept
+{
+  return this->at(id);
+}
+
+template< class T > const T& topit::Vector< T >::operator[](size_t id) const noexcept
+{
+  return this->at(id);
+}
+
 template< class T > void topit::Vector< T >::pushBack(const T &val)
 {
   if (size_ < capacity_) {
@@ -58,7 +68,7 @@ template< class T > bool topit::operator==(const Vector< T > &lhs, const Vector<
 {
   if (lhs.capacity_ == rhs.capacity_ && lhs.size_ == rhs.size_) {
     size_t count = 0;
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < lhs.size_; i++) {
       if (lhs.data_[i] == rhs.data_[i]) {
         count++;
       }
@@ -76,7 +86,10 @@ template< class T > bool topit::operator!=(const Vector< T > &lhs, const Vector<
 }
 
 template< class T > T& topit::Vector< T >::at(size_t id) {
-  return const_cast< T& >(static_cast< const Vector< T >* >(this)->at(id));
+  if (id < getSize()) {
+    return data_[id];
+  }
+  throw std::out_of_range("bad id");
 }
 
 template< class T > const T& topit::Vector< T >::at(size_t id) const {
