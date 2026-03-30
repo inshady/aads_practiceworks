@@ -127,6 +127,27 @@ bool test13()
   return cpy_v == yav && cpy_yav == v;
 }
 
+bool test14()
+{
+  Vector< int > v(2, 0);
+  Vector< int > cpy_v(v);
+
+  Vector< int > yav = std::move(v);
+
+  return yav == cpy_v;
+}
+
+bool test15()
+{
+  Vector< int > v(2, 0);
+  Vector< int > cpy(v);
+  Vector< int > yav;
+
+  yav = std::move(v);
+
+  return yav == cpy;
+}
+
 int main()
 {
   using test_t = bool(*)();
@@ -144,7 +165,9 @@ int main()
     { test10, "Capacity of vector is correct"},
     { test11, "Size of vector increased after adding value" },
     { test12, "Added value is correct" },
-    { test13, "Swap works correctly" }
+    { test13, "Swap works correctly" },
+    { test14, "Move constructor" },
+    { test15, "Move-assignment" }
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
