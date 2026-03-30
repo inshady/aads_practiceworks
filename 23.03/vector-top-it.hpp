@@ -11,8 +11,12 @@ namespace topit {
     Vector(size_t s, const T &val);
     ~Vector();
 
-    Vector(const Vector< T >&) = delete;
-    Vector< T >& operator=(const Vector< T >&) = delete;
+    Vector(const Vector< T > &rhs);
+    Vector< T >& operator=(const Vector< T >&);
+    Vector(Vector< T >&&) noexcept;
+    Vector< T >& operator=(Vector< T >&&) noexcept;
+
+    void swap(Vector< T > &rhs) noexcept;
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
@@ -34,6 +38,28 @@ namespace topit {
 
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
+}
+
+template< class T > topit::Vector< T >& topit::Vector< T >::operator=(const Vector< T > &rhs)
+{
+  Vector< T > cpy(rhs);
+  swap(cpy);
+  return *this;
+}
+
+template< class T > void topit::Vector< T >::swap(Vector< T > &rhs) noexcept
+{
+  std::swap(data_, rhs.data_);
+  std::swap(size_, rhs.size_);
+  std::swap(capacity_, rhs.capacity_);
+}
+
+template< class T > topit::Vector< T >::Vector(const Vector< T > &rhs):
+ Vector(rhs.getSize())
+{
+  for (size_t i = 0; i < getSize(); i++) {
+    data_[i] = rhs.data_[i];
+  }
 }
 
 template< class T > T& topit::Vector< T >::operator[](size_t id) noexcept
@@ -66,14 +92,14 @@ template< class T > void topit::Vector< T >::pushBack(const T &val)
 
 template< class T > bool topit::operator==(const Vector< T > &lhs, const Vector< T > &rhs)
 {
-  if (lhs.capacity_ == rhs.capacity_ && lhs.size_ == rhs.size_) {
+  if (lhs.getCapacity() == rhs.getCapacity() && lhs.getSize() == rhs.getSize()) {
     size_t count = 0;
-    for (size_t i = 0; i < lhs.size_; i++) {
-      if (lhs.data_[i] == rhs.data_[i]) {
+    for (size_t i = 0; i < lhs.getSize(); i++) {
+      if (lhs[i] == rhs[i]) {
         count++;
       }
     }
-    if (count == lhs.size_) {
+    if (count == lhs.getSize()) {
       return true;
     }
   }

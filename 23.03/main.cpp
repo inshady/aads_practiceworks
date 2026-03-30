@@ -99,7 +99,7 @@ bool test10()
 bool test11()
 {
   constexpr size_t size = 3;
-  const Vector< int > v(size, 0);
+  Vector< int > v(size, 0);
   const int newValue = 10;
   v.pushBack(newValue);
   return v.getSize() == (size + 1);
@@ -108,10 +108,23 @@ bool test11()
 bool test12()
 {
   constexpr size_t size = 3;
-  const Vector< int > v(size, 0);
+  Vector< int > v(size, 0);
   const int newValue = 10;
   v.pushBack(newValue);
   return v[size + 1] == newValue;
+}
+
+bool test13()
+{
+  Vector< int > v(2, 0);
+  Vector< int > yav(3, 1);
+  
+  Vector< int > cpy_v(v);
+  Vector< int > cpy_yav(yav);
+
+  v.swap(yav);
+
+  return cpy_v == yav && cpy_yav == v;
 }
 
 int main()
@@ -130,7 +143,8 @@ int main()
     { test9, "Vectors with inequal content are inequal" },
     { test10, "Capacity of vector is correct"},
     { test11, "Size of vector increased after adding value" },
-    { test12, "Added value is correct" }
+    { test12, "Added value is correct" },
+    { test13, "Swap works correctly" }
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
