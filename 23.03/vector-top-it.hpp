@@ -23,6 +23,20 @@ namespace topit {
     size_t getCapacity() const noexcept;
 
     void pushBack(const T &val);
+    void pushFront(const T& val);
+
+    // ДЗ (1. использовать copy/swap 2. протестировать)
+    void insert(size_t pos, const T& val);
+    void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
+    void erase(size_t pos);
+
+    // написать итераторы
+    // придумать по 3 insert/erase с итераторами
+    // например
+
+    struct VectorIterator;
+    insert(VectorIterator pos, const T& val);
+    erase(VectorIterator pos);
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -38,6 +52,17 @@ namespace topit {
 
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
+}
+
+template< class T > void topit::Vector< T >::pushFront(const T& val)
+{
+  Vector< T > result(getSize() + 1);
+  result[0] = val;
+  for (size_t i = 0; i < getSize(); i++) {
+    result[i + 1] = (*this)[i];
+  }
+
+  swap(result);
 }
 
 template< class T > topit::Vector< T >& topit::Vector< T >::operator=(Vector< T > &&rhs) noexcept
