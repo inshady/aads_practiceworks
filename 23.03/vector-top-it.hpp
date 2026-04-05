@@ -34,8 +34,8 @@ namespace topit {
     // придумать по 3 insert/erase с итераторами
     // например
     struct VectorIterator;
-    insert(VectorIterator pos, const T& val);
-    erase(VectorIterator pos);
+    void insert(VectorIterator pos, const T& val);
+    void erase(VectorIterator pos);
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -51,6 +51,55 @@ namespace topit {
 
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
+}
+
+template< class T > void topit::Vector< T >::erase(size_t pos)
+{
+  if (pos >= getSize()) {
+    throw std::out_of_range("bad pos");
+  }
+  Vector< T > result(getSize() - 1);
+  for (size_t i = 0; i < pos; i++) {
+    result[i] = (*this)[i];
+  }
+  for (size_t i = pos + 1; i < getSize(); i++) {
+    result[i - 1] = (*this)[i];
+  }
+  swap(result);
+}
+
+template< class T > void topit::Vector< T >::insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e)
+{
+  if (pos > getSize() || b > rhs.getSize() || e > rhs.getSize() || b > e) {
+    throw std::out_of_range("bad pos");
+  }
+  Vector< T > result(getSize() + e - b);
+  for (size_t i = 0; i < pos; i++) {
+    result[i] = (*this)[i];
+  }
+  for (size_t i = pos; i < pos + e - b; i++) {
+    result[i] = rhs[i - pos + b];
+  }
+  for (size_t i = pos + e - b; i < getSize() + e - b; i++) {
+    result[i] = (*this)[i - e + b];
+  }
+  swap(result);
+}
+
+template< class T > void topit::Vector< T >::insert(size_t pos, const T& val)
+{
+  if (pos > getSize()) {
+    throw std::out_of_range("bad pos");
+  }
+  Vector< T > result(getSize() + 1);
+  for (size_t i = 0; i < pos; i++) {
+    result[i] = (*this)[i];
+  }
+  result[pos] = val;
+  for (size_t i = pos; i < getSize(); i++) {
+    result[i + 1] = (*this)[i];
+  }
+  swap(result);
 }
 
 template< class T > void topit::Vector< T >::pushFront(const T& val)
