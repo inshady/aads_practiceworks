@@ -8,6 +8,8 @@ namespace topit {
 
   template< class T > struct VIter;
   template< class T > struct Vector {
+    friend class VIter< T >;
+
     Vector();
     Vector(size_t s, const T &val);
     ~Vector();
@@ -86,7 +88,7 @@ namespace topit {
 
 template< class T > void topit::Vector< T >::erase(VIter< T > b, VIter< T > e)
 {
-  erase(b.pos_, e.pos_ - b.pos_);
+  erase(b, e.pos_ - b.pos_);
 }
 
 template< class T > void topit::Vector< T >::erase(VIter< T > pos, size_t count)
