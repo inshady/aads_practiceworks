@@ -25,7 +25,6 @@ namespace topit {
     void pushBack(const T &val);
     void pushFront(const T& val);
 
-    // ДЗ (1. использовать copy/swap 2. протестировать)
     void insert(size_t pos, const T& val);
     void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
     void erase(size_t pos);

@@ -102,23 +102,14 @@ bool test11()
   Vector< int > v(size, 0);
   const int newValue = 10;
   v.pushBack(newValue);
-  return v.getSize() == (size + 1);
+  return v.getSize() == (size + 1) && v[size] == newValue;
 }
 
 bool test12()
 {
-  constexpr size_t size = 3;
-  Vector< int > v(size, 0);
-  const int newValue = 10;
-  v.pushBack(newValue);
-  return v[size + 1] == newValue;
-}
-
-bool test13()
-{
   Vector< int > v(2, 0);
   Vector< int > yav(3, 1);
-  
+
   Vector< int > cpy_v(v);
   Vector< int > cpy_yav(yav);
 
@@ -127,7 +118,7 @@ bool test13()
   return cpy_v == yav && cpy_yav == v;
 }
 
-bool test14()
+bool test13()
 {
   Vector< int > v(2, 0);
   Vector< int > cpy_v(v);
@@ -137,7 +128,7 @@ bool test14()
   return yav == cpy_v;
 }
 
-bool test15()
+bool test14()
 {
   Vector< int > v(2, 0);
   Vector< int > cpy(v);
@@ -146,6 +137,45 @@ bool test15()
   yav = std::move(v);
 
   return yav == cpy;
+}
+
+bool test15()
+{
+  constexpr size_t size = 3;
+  Vector< int > v(size, 0);
+  int val = 10;
+  v.pushFront(val);
+  return v[0] == val && v.getSize() == size + 1;
+}
+
+bool test16()
+{
+  constexpr size_t size = 3;
+  Vector< int > v(size, 0);
+  int val = 10;
+
+  v.insert(2, val);
+
+  return v[2] == val && v.getSize() == size + 1;
+}
+
+bool test17()
+{
+  constexpr size_t size = 3;
+  Vector< int > v(size, 0);
+  Vector< int > v2(5, 1);
+
+  v.insert(3, v2, 2, 3);
+
+  return v[3] == 1 && v[4] == 1 && v.getSize() == size + 1;
+}
+
+bool test18()
+{
+  constexpr size_t size = 3;
+  Vector< int > v(size, 0);
+  v.erase(1);
+  return v.getSize() == size - 1;
 }
 
 int main()
@@ -163,11 +193,14 @@ int main()
     { test8, "Vectors with equal content are equal" },
     { test9, "Vectors with inequal content are inequal" },
     { test10, "Capacity of vector is correct"},
-    { test11, "Size of vector increased after adding value" },
-    { test12, "Added value is correct" },
-    { test13, "Swap works correctly" },
-    { test14, "Move constructor" },
-    { test15, "Move-assignment" }
+    { test11, "Push back works correctly" },
+    { test12, "Swap works correctly" },
+    { test13, "Move constructor" },
+    { test14, "Move-assignment" },
+    { test15, "Push front" },
+    { test16, "Insert by position" },
+    { test17, "Insert by range" },
+    { test18, "Erase by position" }
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
