@@ -6,6 +6,7 @@
 
 namespace topit {
 
+  template< class T > struct VIter;
   template< class T > struct Vector {
     Vector();
     Vector(size_t s, const T &val);
@@ -22,6 +23,9 @@ namespace topit {
     size_t getSize() const noexcept;
     size_t getCapacity() const noexcept;
 
+    VIter< T > begin() noexcept;
+    VIter< T > end() noexcept;
+
     void pushBack(const T &val);
     void pushFront(const T& val);
 
@@ -32,9 +36,8 @@ namespace topit {
     // написать итераторы
     // придумать по 3 insert/erase с итераторами
     // например
-    struct VectorIterator;
-    void insert(VectorIterator pos, const T& val);
-    void erase(VectorIterator pos);
+    void insert(VIter< T > pos, const T& val);
+    void erase(VIter< T > pos);
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -48,8 +51,76 @@ namespace topit {
     explicit Vector(size_t s);
   };
 
+  template< class T > struct VIter {
+    friend class Vector< T >;
+
+    VIter& operator++();
+    VIter operator++(int shift);
+    VIter& operator--();
+    VIter operator--(int shift);
+
+    T& operator*() noexcept;
+    T* operator->() noexcept;
+
+    bool operator==(const VIter& rhs) const noexcept;
+    bool operator!=(const VIter& rhs) const noexcept;
+   private:
+    explicit VIter(size_t pos, Vector< T > *vec);
+    size_t pos_;
+    Vector< T > *vec_;
+  };
+
+  template< class T > VIter< T >::VIter(size_t pos, Vector< T > *vec):
+  pos_(pos),
+  vec_(vec)
+  {}
+
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
+}
+
+template< class T > bool topit::VIter< T >::operator!=(const VIter& rhs) const noexcept
+{
+  return !(*this == rhs);
+}
+
+template< class T > bool topit::VIter< T >::operator==(const VIter& rhs) const noexcept
+{
+  return pos_ == rhs.pos_ && vec_ == rhs.vec_;
+}
+
+template< class T > T& topit::VIter< T >::operator*() noexcept
+{
+  return vec_->data_[pos_];
+}
+
+template< class T > T* topit::VIter< T >::operator->() noexcept
+{
+  return &(vec_->data_[pos_]);
+}
+
+template< class T > topit::VIter< T > topit::VIter< T >::operator--(int shift)
+{
+  pos_ -= shift;
+  return *this;
+}
+
+template< class T > topit::VIter< T >& topit::VIter< T >::operator--()
+{
+  pos_--;
+  return *this;
+}
+
+template< class T > topit::VIter< T > topit::VIter< T >::operator++(int shift)
+{
+  pos_ += shift;
+  return *this;
+}
+
+template< class T > topit::VIter< T >& topit::VIter< T >::operator++()
+{
+  pos_++;
+  return *this;
 }
 
 template< class T > void topit::Vector< T >::erase(size_t pos)
