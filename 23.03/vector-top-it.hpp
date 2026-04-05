@@ -42,8 +42,8 @@ namespace topit {
     void erase(VIter< T > b, VIter< T > e);
     void erase(VIter< T > pos, size_t count);
 
-    T& operator[](size_t id) noexcept;
-    const T& operator[](size_t id) const noexcept;
+    T& operator[](size_t id);
+    const T& operator[](size_t id) const;
     T& at(size_t id);
     const T& at(size_t id) const;
 
@@ -97,7 +97,7 @@ template< class T > void topit::Vector< T >::erase(VIter< T > pos, size_t count)
     throw std::out_of_range("bad count");
   }
 
-  for(size_t i = pos.pos_; i < pos.pos_ + count; i++) {
+  for(size_t i = 0; i < count; i++) {
     erase(pos.pos_);
   }
 }
@@ -279,12 +279,12 @@ template< class T > topit::Vector< T >::Vector(const Vector< T > &rhs):
   }
 }
 
-template< class T > T& topit::Vector< T >::operator[](size_t id) noexcept
+template< class T > T& topit::Vector< T >::operator[](size_t id)
 {
   return this->at(id);
 }
 
-template< class T > const T& topit::Vector< T >::operator[](size_t id) const noexcept
+template< class T > const T& topit::Vector< T >::operator[](size_t id) const
 {
   return this->at(id);
 }
@@ -301,7 +301,7 @@ template< class T > void topit::Vector< T >::pushBack(const T &val)
 
 template< class T > bool topit::operator==(const Vector< T > &lhs, const Vector< T > &rhs)
 {
-  if (lhs.getCapacity() == rhs.getCapacity() && lhs.getSize() == rhs.getSize()) {
+  if (lhs.getSize() == rhs.getSize()) {
     size_t count = 0;
     for (size_t i = 0; i < lhs.getSize(); i++) {
       if (lhs[i] == rhs[i]) {

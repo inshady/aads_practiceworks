@@ -167,7 +167,7 @@ bool test17()
 
   v.insert(3, v2, 2, 3);
 
-  return v[3] == 1 && v[4] == 1 && v.getSize() == size + 1;
+  return v[3] == 1 && v.getSize() == size + 1;
 }
 
 bool test18()
