@@ -119,20 +119,12 @@ template< class T > const T& topit::Vector< T >::operator[](size_t id) const noe
 
 template< class T > void topit::Vector< T >::pushBack(const T &val)
 {
-  if (size_ < capacity_) {
-    data_[size_ + 1] = val;
-    size_++;
-  } else {
-    T* newData = new T[size_ + 1];
-    for (size_t i = 0; i < size_; i++) {
-      newData[i] = data_[i];
-    }
-    newData[size_ + 1] = val;
-    delete[] data_;
-    data_ = newData;
-    size_++;
-    capacity_++;
+  Vector< T > result(getSize() + 1);
+  for (size_t i = 0; i < getSize(); i++) {
+    result[i] = (*this)[i];
   }
+  result[getSize()] = val;
+  swap(result);
 }
 
 template< class T > bool topit::operator==(const Vector< T > &lhs, const Vector< T > &rhs)
