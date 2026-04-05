@@ -29,6 +29,10 @@ namespace topit {
     void pushBack(const T &val);
     void pushFront(const T& val);
 
+    void insert(size_t pos, const T& val);
+    void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
+    void erase(size_t pos);
+
     void insert(VIter< T > pos, const T& val);
     void insert(VIter< T > pos, const Vector< T > &rhs, VIter< T > b, VIter< T > e);
     void insert(VIter< T > pos, const Vector< T > &rhs);
@@ -46,23 +50,22 @@ namespace topit {
     size_t size_, capacity_;
 
     explicit Vector(size_t s);
-
-    void insert(size_t pos, const T& val);
-    void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
-    void erase(size_t pos);
-
   };
 
   template< class T > struct VIter {
     friend class Vector< T >;
 
     VIter& operator++();
-    VIter operator++(int shift);
+    VIter operator+(int shift);
     VIter& operator--();
-    VIter operator--(int shift);
+    VIter operator-(int shift);
 
     T& operator*() noexcept;
     T* operator->() noexcept;
+
+    size_t getPos() const noexcept {
+      return pos_;
+    }
 
     bool operator==(const VIter& rhs) const noexcept;
     bool operator!=(const VIter& rhs) const noexcept;
@@ -147,7 +150,7 @@ template< class T > T* topit::VIter< T >::operator->() noexcept
   return &(vec_->data_[pos_]);
 }
 
-template< class T > topit::VIter< T > topit::VIter< T >::operator--(int shift)
+template< class T > topit::VIter< T > topit::VIter< T >::operator-(int shift)
 {
   pos_ -= shift;
   return *this;
@@ -159,7 +162,7 @@ template< class T > topit::VIter< T >& topit::VIter< T >::operator--()
   return *this;
 }
 
-template< class T > topit::VIter< T > topit::VIter< T >::operator++(int shift)
+template< class T > topit::VIter< T > topit::VIter< T >::operator+(int shift)
 {
   pos_ += shift;
   return *this;

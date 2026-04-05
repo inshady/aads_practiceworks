@@ -178,6 +178,119 @@ bool test18()
   return v.getSize() == size - 1;
 }
 
+bool test19()
+{
+  Vector< int > v(3, 0);
+  auto it = v.begin();
+
+  return *it == 0;
+}
+
+bool test20()
+{
+  Vector< int > v(3, 0);
+  auto it = v.begin();
+  ++it;
+  return it.getPos() == 1;
+}
+
+bool test21()
+{
+  Vector< int > v(3, 0);
+  auto it = v.end();
+  --it;
+  return it.getPos() == 2;
+}
+
+bool test22()
+{
+  Vector< int > v(5, 0);
+  auto it = v.begin();
+  it = it + 3;
+  return it.getPos() == 3;
+}
+
+bool test23()
+{
+  Vector< int > v(5, 0);
+  auto it = v.end();
+  it = it - 2;
+  return it.getPos() == 3;
+}
+
+bool test24()
+{
+  Vector< int > v(5, 0);
+  auto it = v.begin();
+  auto it2 = v.end() - 5;
+  return it == it2;
+}
+
+bool test25()
+{
+  Vector< int > v(5, 0);
+  auto it = v.begin();
+  auto it2 = v.end() - 4;
+  return it != it2;
+}
+
+bool test26()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  v.insert(it, 10);
+  return v[1] == 10 && v.getSize() == size + 1;
+}
+
+bool test27()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  Vector< int > v2(3, 1);
+  v.insert(it, v2);
+  return v[1] == 1 && v[2] == 1 && v[3] == 1 && v.getSize() == size + 3;
+}
+
+bool test28()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  Vector< int > v2(3, 1);
+  v.insert(it, v2, v2.begin(), v2.end());
+  return v[1] == 1 && v[2] == 1 && v[3] == 1 && v.getSize() == size + 3;
+}
+
+bool test29()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  v.erase(it);
+  return v.getSize() == size - 1;
+}
+
+bool test30()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  auto it2 = v.begin() + 4;
+  v.erase(it, it2);
+  return v.getSize() == size - 3;
+}
+
+bool test31()
+{
+  constexpr size_t size = 5;
+  Vector< int > v(size, 0);
+  auto it = v.begin() + 1;
+  v.erase(it, 3);
+  return v.getSize() == size - 3;
+}
+
 int main()
 {
   using test_t = bool(*)();
@@ -200,7 +313,20 @@ int main()
     { test15, "Push front" },
     { test16, "Insert by position" },
     { test17, "Insert by range" },
-    { test18, "Erase by position" }
+    { test18, "Erase by position" },
+    { test19, "Begin iterator" },
+    { test20, "Iterator increment" },
+    { test21, "Iterator decrement" },
+    { test22, "Iterator addition" },
+    { test23, "Iterator subtraction" },
+    { test24, "Iterator equality" },
+    { test25, "Iterator inequality" },
+    { test26, "Insert by iterator" },
+    { test27, "Insert vector by iterator" },
+    { test28, "Insert range by iterator" },
+    { test29, "Erase by iterator" },
+    { test30, "Erase range by iterator" },
+    { test31, "Erase range by iterator and count" },
   };
 
   size_t count = sizeof(tests) / sizeof(case_t);
