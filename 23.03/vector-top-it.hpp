@@ -29,15 +29,12 @@ namespace topit {
     void pushBack(const T &val);
     void pushFront(const T& val);
 
-    void insert(size_t pos, const T& val);
-    void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
-    void erase(size_t pos);
-
-    // написать итераторы
-    // придумать по 3 insert/erase с итераторами
-    // например
     void insert(VIter< T > pos, const T& val);
+    void insert(VIter< T > pos, const Vector< T > &rhs, VIter< T > b, VIter< T > e);
+    void insert(VIter< T > pos, const Vector< T > &rhs);
     void erase(VIter< T > pos);
+    void erase(VIter< T > b, VIter< T > e);
+    void erase(VIter< T > pos, size_t count);
 
     T& operator[](size_t id) noexcept;
     const T& operator[](size_t id) const noexcept;
@@ -49,6 +46,11 @@ namespace topit {
     size_t size_, capacity_;
 
     explicit Vector(size_t s);
+
+    void insert(size_t pos, const T& val);
+    void insert(size_t pos, const Vector< T > &rhs, size_t b, size_t e);
+    void erase(size_t pos);
+
   };
 
   template< class T > struct VIter {
@@ -77,6 +79,52 @@ namespace topit {
 
   template< class T > bool operator==(const Vector< T > &lhs, const Vector< T > &rhs);
   template< class T > bool operator!=(const Vector< T > &lhs, const Vector< T > &rhs);
+}
+
+template< class T > void topit::Vector< T >::erase(VIter< T > b, VIter< T > e)
+{
+  erase(b.pos_, e.pos_ - b.pos_);
+}
+
+template< class T > void topit::Vector< T >::erase(VIter< T > pos, size_t count)
+{
+  if (pos.pos_ + count > getSize()) {
+    throw std::out_of_range("bad count");
+  }
+
+  for(size_t i = pos.pos_; i < pos.pos_ + count; i++) {
+    erase(pos.pos_);
+  }
+}
+
+template< class T > void topit::Vector< T >::erase(VIter< T > pos)
+{
+  erase(pos.pos_);
+}
+
+template< class T > void topit::Vector< T >::insert(VIter< T > pos, const T& val)
+{
+  insert(pos.pos_, val);
+}
+
+template< class T > void topit::Vector< T >::insert(VIter< T > pos, const Vector< T > &rhs, VIter< T > b, VIter< T > e)
+{
+  insert(pos.pos_, rhs, b.pos_, e.pos_);
+}
+
+template< class T > void topit::Vector< T >::insert(VIter< T > pos, const Vector< T > &rhs)
+{
+  insert(pos.pos_, rhs, 0, rhs.getSize());
+}
+
+template< class T > topit::VIter< T > topit::Vector< T >::end() noexcept
+{
+  return VIter< T >(getSize(), this);
+}
+
+template< class T > topit::VIter< T > topit::Vector< T >::begin() noexcept
+{
+  return VIter< T >(0, this);
 }
 
 template< class T > bool topit::VIter< T >::operator!=(const VIter& rhs) const noexcept
